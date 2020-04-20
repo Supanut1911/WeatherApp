@@ -10,20 +10,169 @@
         <!--Weather-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="WeatherVC" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="na6-uN-HXC">
+                                <rect key="frame" x="107" y="296" width="200" height="304"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imClouds" translatesAutoresizingMaskIntoConstraints="NO" id="CMe-Jy-YES">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="CMe-Jy-YES" secondAttribute="height" multiplier="1:1" id="zvt-Ga-eLb"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="29 C" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cm-Or-TAa">
+                                        <rect key="frame" x="0.0" y="216" width="200" height="36"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="26"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mostly Coudy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wnF-c4-F14">
+                                        <rect key="frame" x="0.0" y="268" width="200" height="36"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="26"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="mAz-NA-vLe"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="na6-uN-HXC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="aFE-pG-p9Z"/>
+                            <constraint firstItem="na6-uN-HXC" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="cdf-6c-wVx"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Weather" id="Xcw-4H-PB4">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="Dgz-a0-nup"/>
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="location" catalog="system" id="k1v-3Y-cB5">
+                            <connections>
+                                <action selector="currentLocationPress:" destination="BYZ-38-t0r" id="4Lj-pY-OmQ"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="Dgz-a0-nup">
+                            <connections>
+                                <action selector="addLocationPressed:" destination="BYZ-38-t0r" id="RGN-aI-SJE"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="conditionImageView" destination="CMe-Jy-YES" id="DRD-Z1-4fG"/>
+                        <outlet property="conditionLabel" destination="wnF-c4-F14" id="e0H-ui-qkl"/>
+                        <outlet property="tempLabel" destination="1cm-Or-TAa" id="mHP-rJ-Ic6"/>
+                        <segue destination="brx-sp-4Ex" kind="presentation" identifier="showAddCity" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="v9D-UW-Vn5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1047.8260869565217" y="119.86607142857142"/>
+        </scene>
+        <!--Add CityVC-->
+        <scene sceneID="X48-KQ-09W">
+            <objects>
+                <viewController id="brx-sp-4Ex" customClass="AddCityVC" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="LFz-BJ-MdQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f8n-RE-q8K" userLabel="ContainerView">
+                                <rect key="frame" x="67" y="201" width="280" height="225"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="kep-zV-bGf">
+                                        <rect key="frame" x="24" y="24" width="232" height="177"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter city" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o3J-Xm-flp">
+                                                <rect key="frame" x="0.0" y="0.0" width="232" height="25"/>
+                                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BT7-yG-fcD">
+                                                <rect key="frame" x="0.0" y="35" width="232" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="WLM-zk-TJA"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uRo-ao-LDK">
+                                                <rect key="frame" x="0.0" y="85" width="232" height="30"/>
+                                                <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="Search">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="searchButtonTap:" destination="brx-sp-4Ex" eventType="touchUpInside" id="Dhk-b4-qib"/>
+                                                </connections>
+                                            </button>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="eWe-tt-90P">
+                                                <rect key="frame" x="0.0" y="125" width="232" height="20"/>
+                                            </activityIndicatorView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QoB-Pn-Tcc">
+                                                <rect key="frame" x="0.0" y="155" width="232" height="22"/>
+                                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="280" id="ART-8E-M5l"/>
+                                    <constraint firstAttribute="bottom" secondItem="kep-zV-bGf" secondAttribute="bottom" constant="24" id="dMp-Td-WmH"/>
+                                    <constraint firstAttribute="trailing" secondItem="kep-zV-bGf" secondAttribute="trailing" constant="24" id="kD5-sm-1rl"/>
+                                    <constraint firstItem="kep-zV-bGf" firstAttribute="leading" secondItem="f8n-RE-q8K" secondAttribute="leading" constant="24" id="mFT-nD-1Xv"/>
+                                    <constraint firstItem="kep-zV-bGf" firstAttribute="top" secondItem="f8n-RE-q8K" secondAttribute="top" constant="24" id="qsD-Ji-qTs"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="f8n-RE-q8K" firstAttribute="centerY" secondItem="LFz-BJ-MdQ" secondAttribute="centerY" multiplier="0.7" id="7PZ-rt-hJK"/>
+                            <constraint firstItem="f8n-RE-q8K" firstAttribute="centerX" secondItem="LFz-BJ-MdQ" secondAttribute="centerX" id="YMI-CI-Dj7"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="q4Z-Oz-PeO"/>
+                    </view>
+                    <connections>
+                        <outlet property="activityView" destination="eWe-tt-90P" id="As3-GZ-Ves"/>
+                        <outlet property="cityTextField" destination="BT7-yG-fcD" id="BUr-lz-s9t"/>
+                        <outlet property="searchButton" destination="uRo-ao-LDK" id="DJH-u1-9U5"/>
+                        <outlet property="statusLable" destination="QoB-Pn-Tcc" id="Fq9-40-vHp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="otd-Ef-BT6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1811.594202898551" y="119.86607142857142"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="CBa-Kk-aBx">
@@ -45,6 +194,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="imClouds" width="512" height="512"/>
+        <image name="location" catalog="system" width="64" height="56"/>
         <image name="plus" catalog="system" width="64" height="56"/>
     </resources>
 </document>
