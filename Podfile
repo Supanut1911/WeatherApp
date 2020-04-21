@@ -8,4 +8,5 @@ target 'WeatherApp' do
   # Pods for WeatherApp
 pod 'Alamofire'
 pod 'SkeletonView'
+pod 'Loaf'
 end

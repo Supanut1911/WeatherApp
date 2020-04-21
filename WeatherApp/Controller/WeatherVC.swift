@@ -9,6 +9,7 @@
 import UIKit
 import SkeletonView
 import CoreLocation
+import Loaf
 
 protocol WeatherViewControllerDelegate: class {
     func didUpdateWeatherFromSearch(model: WeatherModel)
@@ -39,7 +40,7 @@ class WeatherVC: UIViewController {
         showAnimation()
         let lat = location.coordinate.latitude
         let lon = location.coordinate.longitude
-        weatherManager.fetchWeatherByCoordinate(lat: lat, lon: lon) { [weak self](result) in
+        weatherManager.fetchWeatherByCoordinate(lat: lat, lon: 99999999) { [weak self](result) in
             guard let this = self else {return}
             this.handleResult(result)
         }
@@ -59,7 +60,12 @@ class WeatherVC: UIViewController {
             self.updateView(with: model)
             
         case .failure(let error):
-            print(error)
+            hindAnimate()
+            conditionImageView.image = UIImage(named: "imSad")
+            tempLabel.text = "Oops"
+            conditionLabel.text = "Something went wrong, please try again!"
+            navigationItem.title = ""
+            Loaf(error.localizedDescription, state: .error, location: .bottom, sender: self).show()
         }
     }
     
@@ -132,13 +138,7 @@ extension WeatherVC: WeatherViewControllerDelegate {
             guard let this = self else {return}
             this.updateView(with: model)
         })
-        
-       
-        
-        
     }
-    
-    
 }
 
 extension WeatherVC: CLLocationManagerDelegate {
