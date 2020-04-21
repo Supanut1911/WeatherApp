@@ -40,7 +40,7 @@ class WeatherVC: UIViewController {
         showAnimation()
         let lat = location.coordinate.latitude
         let lon = location.coordinate.longitude
-        weatherManager.fetchWeatherByCoordinate(lat: lat, lon: 99999999) { [weak self](result) in
+        weatherManager.fetchWeatherByCoordinate(lat: lat, lon: lon) { [weak self](result) in
             guard let this = self else {return}
             this.handleResult(result)
         }
@@ -60,13 +60,17 @@ class WeatherVC: UIViewController {
             self.updateView(with: model)
             
         case .failure(let error):
-            hindAnimate()
-            conditionImageView.image = UIImage(named: "imSad")
-            tempLabel.text = "Oops"
-            conditionLabel.text = "Something went wrong, please try again!"
-            navigationItem.title = ""
-            Loaf(error.localizedDescription, state: .error, location: .bottom, sender: self).show()
+            self.handleError(error)
         }
+    }
+    
+    private func handleError(_ error: Error) {
+        hindAnimate()
+        conditionImageView.image = UIImage(named: "imSad")
+        tempLabel.text = "Oops"
+        conditionLabel.text = "Something went wrong, please try again!"
+        navigationItem.title = ""
+        Loaf(error.localizedDescription, state: .error, location: .bottom, sender: self).show()
     }
     
     private func updateView(with model: WeatherModel) {
@@ -150,6 +154,6 @@ extension WeatherVC: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        
+        handleError(error)
     }
 }
