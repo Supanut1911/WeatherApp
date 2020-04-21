@@ -35,6 +35,8 @@ class WeatherVC: UIViewController {
 //        weatherManager.fetchWeather(byCity: "London")
         showAnimation()
         fetchWeather()
+        
+        
      
     }
     
@@ -130,7 +132,12 @@ extension WeatherVC: WeatherViewControllerDelegate {
 
 extension WeatherVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations location:[CLLocation]) {
-         
+        if let location = location.last {
+            manager.stopUpdatingLocation()
+            let lat = location.coordinate.latitude
+            let lng = location.coordinate.longitude
+            print(lat,lng)
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
