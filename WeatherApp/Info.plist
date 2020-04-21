@@ -65,5 +65,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your Location is require to show your locallocation</string>
 </dict>
 </plist>

@@ -8,6 +8,7 @@
 
 import UIKit
 import SkeletonView
+import CoreLocation
 
 protocol WeatherViewControllerDelegate: class {
     func didUpdateWeatherFromSearch(model: WeatherModel)
@@ -16,6 +17,11 @@ protocol WeatherViewControllerDelegate: class {
 class WeatherVC: UIViewController {
 
     private let weatherManager = WeatherManager()
+    private lazy var locationManager: CLLocationManager = {
+        let manager = CLLocationManager()
+        manager.delegate = self
+        return manager
+    } ()
     
     
     
@@ -81,6 +87,27 @@ class WeatherVC: UIViewController {
     }
     
     @IBAction func currentLocationPress(_ sender: Any) {
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationManager.requestLocation()
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        default:
+            promptForLocationPermission()
+        }
+    }
+    
+    private func promptForLocationPermission() {
+        let alertController = UIAlertController(title: "Requires Location Permission", message: "Would you like to enable location permission in Settings?", preferredStyle: .alert)
+        let enbleAction = UIAlertAction(title:"Go to Settings", style: .default) {      _ in
+            guard let settingURL = URL(string: UIApplication.openSettingsURLString) else {return}
+            UIApplication.shared.open(settingURL, options: [:], completionHandler: nil)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(enbleAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
 
@@ -101,3 +128,12 @@ extension WeatherVC: WeatherViewControllerDelegate {
     
 }
 
+extension WeatherVC: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations location:[CLLocation]) {
+         
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        
+    }
+}
