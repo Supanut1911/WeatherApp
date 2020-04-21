@@ -12,6 +12,7 @@ import Alamofire
 enum WeatherError: Error, LocalizedError {
 //    case unknown
     case invalidCity
+    case custom(description: String)
     
     var errorDescription: String? {
         switch self {
@@ -20,6 +21,10 @@ enum WeatherError: Error, LocalizedError {
         
         case .invalidCity:
             return "Hey, this is invalidCity, please try again!"
+            
+        case .custom(let description) :
+            return description
+
         }
     }
 }
@@ -36,27 +41,41 @@ struct WeatherManager {
         
         let urlString = String(format: path, city, API_KEY)
         
-        AF.request(urlString).responseDecodable(of: WeatherData.self, queue: .main, decoder: JSONDecoder()) { (res) in
+        AF.request(urlString)
+            .validate()
+            .responseDecodable(of: WeatherData.self, queue: .main, decoder: JSONDecoder()) { (res) in
             switch res.result {
             case .success(let weatherData):
                 let model = weatherData.model
                 completion(.success(model))
                 
             case .failure(let error):
-              print(res.response?.statusCode)
-                let statusCode = res.response?.statusCode
-       
-                if statusCode == 404 {
-                    let invalidCityError = WeatherError.invalidCity
-                    completion(.failure(invalidCityError))
+//              print(res.response?.statusCode)
+//                print(error.responseCode)
+              
+                if let err = self.getWeatherError(error: error, data: res.data) {
+                    completion(.failure(err))
                 } else {
                     completion(.failure(error))
                 }
-                
-                
-                
+
+//                if error.responseCode == 404 {
+//                    let invalidCityError = WeatherError.custom(description: "This so random")
+//                    completion(.failure(invalidCityError))
+//                } else {
+//                    completion(.failure(error))
+//                }
                 
             }
+        }
+    }
+    
+    private func getWeatherError(error: AFError, data: Data?) -> Error? {
+        if error.responseCode == 404, let data = data, let failure = try? JSONDecoder().decode(WeatherDataFailure.self, from: data) {
+            let message = failure.message
+            return WeatherError.custom(description: message)
+        } else {
+            return nil
         }
     }
     
