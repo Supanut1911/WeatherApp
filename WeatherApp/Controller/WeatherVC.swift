@@ -17,7 +17,7 @@ class WeatherVC: UIViewController {
 
     private let weatherManager = WeatherManager()
     
-    var resData = [WeatherData]()
+    
     
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var tempLabel: UILabel!

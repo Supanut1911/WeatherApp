@@ -9,6 +9,22 @@
 import Foundation
 import Alamofire
 
+enum WeatherError: Error, LocalizedError {
+//    case unknown
+    case invalidCity
+    
+    var errorDescription: String? {
+        switch self {
+//        case .unknown:
+//            return "Hey, this is an unknown error!"
+        
+        case .invalidCity:
+            return "Hey, this is invalidCity, please try again!"
+        }
+    }
+}
+
+
 struct WeatherManager {
     private let API_KEY = "3281d6d2d93e329f54948ee647965d9a"
     
@@ -27,7 +43,19 @@ struct WeatherManager {
                 completion(.success(model))
                 
             case .failure(let error):
-                completion(.failure(error))
+              print(res.response?.statusCode)
+                let statusCode = res.response?.statusCode
+       
+                if statusCode == 404 {
+                    let invalidCityError = WeatherError.invalidCity
+                    completion(.failure(invalidCityError))
+                } else {
+                    completion(.failure(error))
+                }
+                
+                
+                
+                
             }
         }
     }

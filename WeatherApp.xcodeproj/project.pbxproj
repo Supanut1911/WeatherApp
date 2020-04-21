@@ -80,6 +80,7 @@
 		1733821A244D751F0058C8D6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				175E3F46244CB7A400830C6B /* WeatherVC.swift */,
 				1733821B244D75320058C8D6 /* AddCityVC.swift */,
 			);
 			path = Controller;
@@ -112,7 +113,6 @@
 				17338211244D65780058C8D6 /* Manager */,
 				175E3F42244CB7A400830C6B /* AppDelegate.swift */,
 				175E3F44244CB7A400830C6B /* SceneDelegate.swift */,
-				175E3F46244CB7A400830C6B /* WeatherVC.swift */,
 				175E3F48244CB7A400830C6B /* Main.storyboard */,
 				175E3F4B244CB7A900830C6B /* Assets.xcassets */,
 				175E3F4D244CB7A900830C6B /* LaunchScreen.storyboard */,
