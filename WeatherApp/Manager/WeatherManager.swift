@@ -45,15 +45,15 @@ struct WeatherManager {
     }
     
         
-        func fetchWeatherByCoordinate(lat :Double, lon: Double, completion:@escaping (Result<WeatherModel, Error>)-> Void) {
-            
-            let path = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%@&units=metric?"
-            
-            let urlString = String(format: path , lat, lon ,API_KEY)
-            print(urlString)
-            handleRequest(urlString: urlString, completion: completion)
-            
-        }
+    func fetchWeatherByCoordinate(lat :Double, lon: Double, completion:@escaping (Result<WeatherModel, Error>)-> Void) {
+        
+        let path = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%@&units=metric?"
+        
+        let urlString = String(format: path , lat, lon ,API_KEY)
+        print(urlString)
+        handleRequest(urlString: urlString, completion: completion)
+        
+    }
     
     func handleRequest(urlString: String, completion:@escaping (Result<WeatherModel, Error>)-> Void) {
         AF.request(urlString)

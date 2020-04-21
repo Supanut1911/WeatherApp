@@ -31,24 +31,35 @@ class WeatherVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        weatherManager.fetchWeather(byCity: "London")
-        showAnimation()
-        fetchWeather()
-        
-        
-     
+
+        fetchWeather(byCity: "berlin")
     }
     
-    private func fetchWeather() {
-        weatherManager.fetchWeather(byCity: "London") { (result) in
-            switch result{
-            case .success(let model):
-                self.updateView(with: model)
-                
-            case .failure(let error):
-                print(error)
-            }
+    private func fetchWeather(byLocation location: CLLocation) {
+        showAnimation()
+        let lat = location.coordinate.latitude
+        let lon = location.coordinate.longitude
+        weatherManager.fetchWeatherByCoordinate(lat: lat, lon: lon) { [weak self](result) in
+            guard let this = self else {return}
+            this.handleResult(result)
+        }
+    }
+    
+    private func fetchWeather(byCity city: String) {
+        showAnimation()
+        weatherManager.fetchWeather(byCity: city) { [weak self](result) in
+        guard let this = self else {return}
+        this.handleResult(result)
+        }
+    }
+    
+    private func handleResult(_ result: Result<WeatherModel, Error>) {
+        switch result{
+        case .success(let model):
+            self.updateView(with: model)
+            
+        case .failure(let error):
+            print(error)
         }
     }
     
@@ -134,21 +145,7 @@ extension WeatherVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations location:[CLLocation]) {
         if let location = location.last {
             manager.stopUpdatingLocation()
-            let lat = location.coordinate.latitude
-            let lng = location.coordinate.longitude
-            print(lat,lng)
-
-            weatherManager.fetchWeatherByCoordinate(lat: lat, lon: lng) { (result) in
-                
-                switch result {
-                case .success(let model):
-                    print(model.countryName)
-                    self.updateView(with: model)
-                
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            fetchWeather(byLocation: location)
         }
     }
     
