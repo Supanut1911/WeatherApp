@@ -41,7 +41,7 @@ class WeatherVC: UIViewController {
     }
     
     private func fetchWeather() {
-        weatherManager.fetchWeather(byCity: "Thailand") { (result) in
+        weatherManager.fetchWeather(byCity: "London") { (result) in
             switch result{
             case .success(let model):
                 self.updateView(with: model)
@@ -137,6 +137,18 @@ extension WeatherVC: CLLocationManagerDelegate {
             let lat = location.coordinate.latitude
             let lng = location.coordinate.longitude
             print(lat,lng)
+
+            weatherManager.fetchWeatherByCoordinate(lat: lat, lon: lng) { (result) in
+                
+                switch result {
+                case .success(let model):
+                    print(model.countryName)
+                    self.updateView(with: model)
+                
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
     

@@ -32,7 +32,7 @@ enum WeatherError: Error, LocalizedError {
 
 struct WeatherManager {
     private let API_KEY = "3281d6d2d93e329f54948ee647965d9a"
-    
+        
     func fetchWeather(byCity city: String, completion:@escaping (Result<WeatherModel, Error>)-> Void) {
         
         let query = city.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? city
@@ -41,6 +41,21 @@ struct WeatherManager {
         
         let urlString = String(format: path, city, API_KEY)
         
+        handleRequest(urlString: urlString, completion: completion)
+    }
+    
+        
+        func fetchWeatherByCoordinate(lat :Double, lon: Double, completion:@escaping (Result<WeatherModel, Error>)-> Void) {
+            
+            let path = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%@&units=metric?"
+            
+            let urlString = String(format: path , lat, lon ,API_KEY)
+            print(urlString)
+            handleRequest(urlString: urlString, completion: completion)
+            
+        }
+    
+    func handleRequest(urlString: String, completion:@escaping (Result<WeatherModel, Error>)-> Void) {
         AF.request(urlString)
             .validate()
             .responseDecodable(of: WeatherData.self, queue: .main, decoder: JSONDecoder()) { (res) in
@@ -50,25 +65,18 @@ struct WeatherManager {
                 completion(.success(model))
                 
             case .failure(let error):
-//              print(res.response?.statusCode)
-//                print(error.responseCode)
-              
+
+                
                 if let err = self.getWeatherError(error: error, data: res.data) {
                     completion(.failure(err))
                 } else {
                     completion(.failure(error))
                 }
 
-//                if error.responseCode == 404 {
-//                    let invalidCityError = WeatherError.custom(description: "This so random")
-//                    completion(.failure(invalidCityError))
-//                } else {
-//                    completion(.failure(error))
-//                }
-                
             }
         }
     }
+
     
     private func getWeatherError(error: AFError, data: Data?) -> Error? {
         if error.responseCode == 404, let data = data, let failure = try? JSONDecoder().decode(WeatherDataFailure.self, from: data) {
